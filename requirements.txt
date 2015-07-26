@@ -1,0 +1,5 @@
+blessings==1.6
+curtsies==0.1.19
+Pygments==2.0.2
+requests==2.7.0
+virtualenv==13.1.0
