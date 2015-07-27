@@ -1,30 +1,56 @@
 -- 1. Select all columns for all brands in the Brands table.
 
+SELECT * FROM Brands;
 -- 2. Select all columns for all car models made by Pontiac in the Models table.
 
+SELECT * FROM Models WHERE brand_name = "Pontiac";
 -- 3. Select the brand name and model 
 --    name for all models made in 1964 from the Models table.
 
+SELECT brand_name, name FROM Models WHERE year = 1964;
 
--- 4. Select the model name, brand name, and headquarters for the Ford Mustang 
+
+-- 4. Select the model name, brand name, and headquarters 
+-- for the Ford Mustang 
 --    from the Models and Brands tables.
+
+
+SELECT m.name , m.brand_name, b.headquarters
+FROM Models AS m
+JOIN Brands AS b
+ON m.brand_name = b.name
+WHERE m.name = "Mustang";
 
 -- 5. Select all rows for the three oldest brands 
 --    from the Brands table (Hint: you can use LIMIT and ORDER BY).
 
--- 6. Count the Ford models in the database (output should be a **number**).
+SELECT * FROM Brands
+ORDER BY founded describe
+LIMIT 3;
 
+-- 6. Count the Ford models in the database (output should be a **number**).
+SELECT COUNT("Ford")
+FROM Models
+WHERE brand_name = "Ford";
 -- 7. Select the **name** of any and all car brands that are not discontinued.
+SELECT name FROM Brands
+WHERE discontinued IS NULL;
 
 -- 8. Select rows 15-25 of the DB in alphabetical order by model name.
-
+SELECT * FROM Models
+WHERE id BETWEEN 15 AND 25
+ORDER BY name;
 -- 9. Select the **brand, name, and year the model's brand was 
 --    founded** for all of the models from 1960. Include row(s)
 --    for model(s) even if its brand is not in the Brands table.
 --    (The year the brand was founded should be ``null`` if 
 --    the brand is not in the Brands table.)
 
-
+SELECT brand_name, Models.name, founded
+    FROM Models
+    JOIN Brands
+    ON Models.brand_name = Brands.name
+    WHERE year = 1960 OR founded IS NULL;
 
 -- Part 2: Change the following queries according to the specifications. 
 -- Include the answers to the follow up questions in a comment below your
@@ -41,6 +67,12 @@
     --     ON b.name = m.brand_name
     -- WHERE b.discontinued IS NULL;
 
+    SELECT b.name, b.founded,m.name
+    FROM Model AS m
+      LEFT JOIN brands AS b
+        ON b.name = m.brand_name
+    WHERE b.discontinued NOT NULL;
+
 -- 2. Modify this left join so it only selects models that have brands in the Brands table.
 -- before: 
     -- SELECT m.name,
@@ -50,8 +82,22 @@
     --   LEFT JOIN Brands AS b
     --     ON b.name = m.brand_name;
 
+    SELECT m.name,m.brand_name,b.founded
+    FROM Models AS m
+    LEFT JOIN Brands AS b
+    ON b.name = m.brand_name
+    WHERE b.name = m.brand_name;
+
 -- followup question: In your own words, describe the difference between 
 -- left joins and inner joins.
+
+Inner Joins: Returns all records of where the two
+tables intersect. 
+
+Left Joins: Returns all records of where tables
+intersect, plus all records from the left
+table even if there is no match for them
+ in the right table.
 
 -- 3. Modify the query so that it only selects brands that don't have any car models in the cars table. 
 -- (Hint: it should only show Tesla's row.)
@@ -62,6 +108,12 @@
     --   LEFT JOIN Models
     --     ON brands.name = Models.brand_name
     -- WHERE Models.year > 1940;
+
+    SELECT Brands.name,founded
+    FROM Brands
+    LEFT JOIN Models
+    ON Brands.name = Models.brand_name
+    WHERE Brands.founded > 2000;
 
 -- 4. Modify the query to add another column to the results to show 
 -- the number of years from the year of the model *until* the brand becomes discontinued
@@ -76,6 +128,15 @@
     --     ON m.brand_name = b.name
     -- WHERE b.discontinued NOT NULL;
 
+    SELECT b.name,
+           m.name,
+           m.year,
+           b.discontinued,
+           b.discontinued-m.year AS years_until_brand_discontinued
+    FROM Models AS m
+      LEFT JOIN brands AS b
+        ON m.brand_name = b.name
+    WHERE b.discontinued NOT NULL;
 
 
 
@@ -83,6 +144,10 @@
 
 -- 1. Select the **name** of any brand with more than 5 models in the database.
 
+SELECT brand_name, name, COUNT(brand_name) AS model_count
+FROM Models
+GROUP BY brand_name
+HAVING model_count > 5;
 -- 2. Add the following rows to the Models table.
 
 -- year    name       brand_name
