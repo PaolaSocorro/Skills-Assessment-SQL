@@ -155,9 +155,26 @@ HAVING model_count > 5;
 -- 2015    Chevrolet  Malibu
 -- 2015    Subaru     Outback
 
+INSERT INTO Models (year, name, brand_name)
+    VALUES ('2015','Chevrolet','Malibu');
+
+INSERT INTO Models (year, name, brand_name)
+    VALUES ('2015','Subaru','Outback');
+
+--I CAN'T WRITE INTO THE DATABASE FOR SOME REASON.
+--SOMETHING ABOUT NOT HAVING PERMISSIONS. I THINK THE QUERIES WOULD WORK THO.
+
+
 -- 3. Write a SQL statement to crate a table called ``Awards`` 
 --    with columns ``name``, ``year``, and ``winner``. Choose 
 --    an appropriate datatype and nullability for each column.
+
+CREATE TABLE Awards(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    year INT(4) NOT NULL,
+    winner_id VARCHAR (50) NOT NULL
+);
 
 -- 4. Write a SQL statement that adds the following rows to the Awards table:
 
@@ -165,6 +182,9 @@ HAVING model_count > 5;
 --   ----                 ----      ---------------
 --   IIHS Safety Award    2015      # get the ``id`` of the 2015 Chevrolet Malibu
 --   IIHS Safety Award    2015      # get the ``id`` of the 2015 Subaru Outback
+
+
+
 
 -- 5. Using a subquery, select only the *name* of any model whose 
 -- year is the same year that *any* brand was founded.
